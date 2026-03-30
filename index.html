@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pillbox Panic!</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="game-container">
+        <header>
+            <div id="logo">
+                <h1>💊 Pillbox Panic</h1>
+            </div>
+            <div class="stats">
+                <button id="help-btn"
+                    style="margin-right: 15px; border-radius: 50%; width: 40px; height: 40px; border: 2px solid white; background: rgba(255,255,255,0.2); color: white; font-weight: bold; font-size: 1.2rem; cursor: pointer;">?</button>
+                <span>Level: <span id="level-val">1</span></span>
+                <span>Score: <span id="score-val">0</span></span>
+            </div>
+        </header>
+
+        <div id="game-area">
+            <!-- Left Panel -->
+            <aside id="patient-panel">
+                <div id="patient-image"></div>
+                <h2><span id="patient-name">Patient</span></h2>
+                <div class="prescription-list" id="rx-list">
+                    <!-- JS fills this -->
+                </div>
+            </aside>
+
+            <!-- Center: Pillbox -->
+            <section id="pillbox-container">
+                <div class="pillbox-grid" id="pillbox-grid">
+                    <!-- JS Fills this with 7x3 grid + headers -->
+                </div>
+            </section>
+
+            <!-- Bottom: Shelf -->
+            <section id="pharmacy-shelf">
+                <!-- 5 Generic Bottles -->
+                <!-- 5 Generic Bottles -->
+                <div class="bottle-wrapper">
+                    <div class="pill-bottle" title="Atorvastatin"></div>
+                    <div class="bottle-label">Atorvastatin</div>
+                </div>
+                <div class="bottle-wrapper">
+                    <div class="pill-bottle" title="Levothyroxine"></div>
+                    <div class="bottle-label">Levothyroxine</div>
+                </div>
+                <div class="bottle-wrapper">
+                    <div class="pill-bottle" title="Lisinopril"></div>
+                    <div class="bottle-label">Lisinopril</div>
+                </div>
+                <div class="bottle-wrapper">
+                    <div class="pill-bottle" title="Metformin"></div>
+                    <div class="bottle-label">Metformin</div>
+                </div>
+                <div class="bottle-wrapper">
+                    <div class="pill-bottle" title="Amlodipine"></div>
+                    <div class="bottle-label">Amlodipine</div>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <div id="timer-bar-container">
+                <div id="timer-bar"></div>
+            </div>
+            <button id="done-btn">DISPENSE</button>
+        </footer>
+    </div>
+
+    <!-- Overlays -->
+    <div id="success-overlay" class="overlay">
+        <h2>Great Job!</h2>
+        <p id="success-msg">Patient feels better.</p>
+        <button id="next-level-btn" style="padding: 10px 20px; font-size: 1.2rem; margin-top: 20px;">Next
+            Patient</button>
+    </div>
+
+    <div id="sick-overlay" class="overlay">
+        <h2 style="color: #ff9800; font-size: 3rem;">Oh No!</h2>
+        <div style="font-size: 4rem; margin: 20px;">🤢</div>
+        <p id="sick-msg" style="font-size: 1.5rem;">The patient took the wrong meds and got sick!</p>
+        <button id="try-again-btn"
+            style="padding: 15px 30px; font-size: 1.5rem; margin-top: 20px; background-color: #ff9800; color: white; border: none; border-radius: 30px; cursor: pointer;">Try
+            Again</button>
+    </div>
+
+    <div id="help-overlay" class="overlay">
+        <h2>How to Play</h2>
+        <div
+            style="background: white; color: #333; padding: 20px; border-radius: 10px; max-width: 500px; text-align: left;">
+            <ol style="font-size: 1.1rem; line-height: 1.6;">
+                <li>Read the <strong>Patient's Prescription</strong> on the left panel.</li>
+                <li>Identify the correct drug by name on the <strong>Pharmacy Shelf</strong> below.</li>
+                <li><strong>Drag</strong> the correct bottle to the correct <strong>Day & Time</strong> slot in the
+                    Pillbox.</li>
+                <li>Fill all required slots correctly before the <strong>Timer</strong> runs out!</li>
+                <li>Right click to remove a pill from a slot.</li>
+                <li>Click <strong>DISPENSE</strong> when you are finished.</li>
+            </ol>
+            <div style="text-align: center; margin-top: 20px;">
+                <button id="close-help-btn"
+                    style="padding: 10px 20px; background: var(--primary-color); color: white; border: none; border-radius: 5px; cursor: pointer;">Got
+                    it!</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="fail-overlay" class="overlay">
+        <h2 style="color: #ff5252">GAME OVER</h2>
+        <p id="fail-msg">Medical Malpractice!</p>
+        <p>Final Score: <span id="final-score"></span></p>
+        <button id="restart-btn" style="padding: 10px 20px; font-size: 1.2rem; margin-top: 20px;">Try Again</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,396 @@
+:root {
+  /* Colors */
+  --bg-color: #f0f8ff;
+  --primary-color: #00bcd4;
+  /* Teal */
+  --secondary-color: #ff9800;
+  /* Orange */
+  --accent-color: #e91e63;
+  /* Pink/Red for errors */
+  --success-color: #4caf50;
+  /* Green */
+  --text-dark: #333;
+  --text-light: #fff;
+  --panel-bg: #ffffff;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  background-image: radial-gradient(#d0e0ff 20%, transparent 20%),
+    radial-gradient(#d0e0ff 20%, transparent 20%);
+  background-position: 0 0, 50px 50px;
+  background-size: 100px 100px;
+  color: var(--text-dark);
+  overflow: hidden;
+  /* Prevent scrolling during drag */
+  user-select: none;
+}
+
+#game-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+/* Header */
+header {
+  background: var(--primary-color);
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+}
+
+.stats span {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-left: 20px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 5px 15px;
+  border-radius: 20px;
+}
+
+/* Main Game Area */
+#game-area {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  grid-template-rows: 1fr 150px;
+  gap: 20px;
+  padding: 20px;
+  background: #f9f9f9;
+  position: relative;
+}
+
+/* Left Panel: Patient Card */
+#patient-panel {
+  grid-row: 1 / 3;
+  background: var(--panel-bg);
+  border-radius: 15px;
+  box-shadow: var(--shadow-sm);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 2px solid #e0e0e0;
+}
+
+#patient-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: #ddd;
+  margin-bottom: 20px;
+  border: 5px solid var(--primary-color);
+  object-fit: cover;
+  /* Assuming we crop parts of the sprite later or use css background */
+  background-image: url('assets/patient_faces.png');
+  background-size: 200%;
+  /* Temporary: we'll shift this in JS/CSS classes */
+  background-position: 0 0;
+}
+
+.prescription-list {
+  text-align: left;
+  width: 100%;
+  background: #fff3e0;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+  flex: 1;
+}
+
+.prescription-item {
+  border-bottom: 1px solid #ffd0b0;
+  padding: 8px 0;
+  font-size: 0.9rem;
+}
+
+.prescription-item:last-child {
+  border: none;
+}
+
+/* Center: Pillbox */
+#pillbox-container {
+  grid-column: 2;
+  grid-row: 1;
+  background: var(--panel-bg);
+  border-radius: 15px;
+  box-shadow: var(--shadow-sm);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.pillbox-grid {
+  display: grid;
+  grid-template-columns: 80px repeat(7, 1fr);
+  /* Labels + 7 days */
+  gap: 10px;
+  flex: 1;
+}
+
+.day-header {
+  font-weight: bold;
+  text-align: center;
+  color: var(--primary-color);
+  text-transform: uppercase;
+}
+
+.time-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #777;
+}
+
+.pill-slot {
+  background: #eef;
+  border: 2px dashed #ccd;
+  border-radius: 8px;
+  min-height: 80px;
+  position: relative;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.pill-slot.drag-over {
+  background: #d4f4fa;
+  border-color: var(--primary-color);
+  transform: scale(1.02);
+}
+
+.pill-in-slot {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  display: inline-block;
+  margin: 2px;
+}
+
+/* Bottom: Pharmacy/Shelf */
+#pharmacy-shelf {
+  grid-column: 2;
+  grid-row: 2;
+  background: #e0e0e0;
+  border-radius: 15px;
+  display: flex;
+  align-items: flex-end;
+  /* Bottles sit on bottom */
+  justify-content: space-around;
+  padding: 10px 40px;
+  box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.bottle-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+}
+
+.bottle-label {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #555;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.pill-bottle {
+  width: 80px;
+  height: 120px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  cursor: grab;
+  transition: transform 0.2s;
+  position: relative;
+}
+
+.bottle-orange {
+  background-image: url('assets/bottle_orange.png');
+}
+
+.bottle-blue {
+  background-image: url('assets/bottle_blue.png');
+}
+
+.bottle-green {
+  background-image: url('assets/bottle_green.png');
+}
+
+.bottle-red {
+  background-image: url('assets/bottle_red.png');
+}
+
+.bottle-purple {
+  background-image: url('assets/bottle_blue.png');
+  filter: hue-rotate(60deg);
+}
+
+.pill-bottle:hover {
+  transform: translateY(-10px);
+}
+
+.pill-bottle:active {
+  cursor: grabbing;
+}
+
+/* Footer */
+footer {
+  padding: 20px;
+  background: white;
+  border-top: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+#timer-bar-container {
+  flex: 1;
+  height: 30px;
+  background: #ddd;
+  border-radius: 15px;
+  overflow: hidden;
+  max-width: 600px;
+}
+
+#timer-bar {
+  height: 100%;
+  background: var(--success-color);
+  width: 100%;
+  transition: width 1s linear, background-color 0.5s;
+}
+
+#done-btn {
+  background: var(--success-color);
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  font-size: 1.5rem;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #388e3c;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+#done-btn:active {
+  transform: translateY(4px);
+  box-shadow: none;
+}
+
+/* Utility / Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  /* hidden by default */
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  flex-direction: column;
+  color: white;
+}
+
+.overlay.active {
+  display: flex;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Draggable Pill Proxy */
+.drag-proxy {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Animations */
+@keyframes shake {
+  0% {
+    transform: translate(1px, 1px) rotate(0deg);
+  }
+
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
+
+  20% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
+
+  30% {
+    transform: translate(3px, 2px) rotate(0deg);
+  }
+
+  40% {
+    transform: translate(1px, -1px) rotate(1deg);
+  }
+
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+  }
+
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg);
+  }
+
+  70% {
+    transform: translate(3px, 1px) rotate(-1deg);
+  }
+
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
+
+  90% {
+    transform: translate(1px, 2px) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg);
+  }
+}
+
+#sick-overlay.active>* {
+  animation: shake 0.5s;
+}
